@@ -1,15 +1,33 @@
-# PA2: Structure from Motion
-This repository contains the code for the second programming assignment on Structure from Motion. The goal of the assignment is to recover 3D structure from two images by performing feature matching, essential matrix estimation and decomposition, and triangulation.
+# Structure from Motion
+## Computer Vision Course Coding Assignment 2
 
-- **Due Date:** 10th May 2025  
-- **TA Sessions:** 1st May 2025 and 8th May 2025  
-- **TA:** Dongmin Shin (newdm2000@gm.gist.ac.kr)
+- Course: GIST Computer Vision (EC4216)
+- Project Type: Structure from Motion Implementation Individual Coding Assignment
 
-**NO PLAGIARISM, NO DELAY, DON'T USE AI SUPPORTER (If you do not comply, you will get F!)**
+### Overview
 
-## Overview
+<p align="justify">
+In this project, we implemented <b>Structure From Motion (SfM)</b> to reconstruct the 3D structure of objects from images taken at multiple viewpoints. First, we performed <b>Two-View SfM</b> using the <b>5-point algorithm</b> on the initial two viewpoints. Then, for additional viewpoints, we applied the <b>3-point algorithm</b> along with <b>bundle adjustment</b> to perform <b>Multi-View SfM</b>.
+</p>
 
-### Before you start, make sure you understand the code flow by reading main_two_view.py
+<p align="justify">
+In each SfM stage, the point algorithms were used to estimate the <b>camera pose</b>, where <b>RANSAC</b> was employed to select the most reliable estimates. Once the camera poses were extracted, we applied <b>triangulation</b> on the matching points across images to obtain <b>3D cloud points</b>.
+</p>
+
+<p align="justify">
+Experiments were conducted under the assumption of <b>constant camera parameters</b>, using both the <b>standard dataset</b> (moai, choonsik, nike, toothless) and a <b>custom dataset</b> (eiffeltower, dinosaur, bluedoll, dog). We confirmed that <b>Two-View SfM</b> could reconstruct partial 3D structures of objects, while <b>Multi-View SfM</b> enabled the recovery of more complete 3D structures. In particular, objects with <b>rich feature points</b>, such as <i>moai</i> and <i>eiffeltower</i>, produced high-quality results.
+</p>
+
+<br/>
+
+<p align="center">
+<img width="70%" alt="image" src="https://github.com/user-attachments/assets/4c6c0372-30e9-4883-9e1b-71874ceb78e8" />
+</p>
+
+
+---
+
+## Description
 
 The provided code (`main_two_view.py`) is structured in multiple stages:  
 1. **Feature Extraction and Matching:**  
@@ -28,7 +46,6 @@ The provided code (`main_two_view.py`) is structured in multiple stages:
    Using the recovered camera poses and inlier matches, the 3D points are triangulated and the point cloud is saved in PLY format.  
    *Fill the #todo blank in:* `triangulate_points`
 
-### Additional credit
 5. **Three Point Algorithm:**  
    In growing step, calculate additional camera pose using three point algorithm with RANSAC. Additionally, calculate inlier points.  
    *Fill the #todo blank in:* `three_point_algorithm`, and `calculate_inlier_points`
@@ -37,7 +54,7 @@ The provided code (`main_two_view.py`) is structured in multiple stages:
    Using the checker board, the intrinsic camera matrix are calculated by the function. Additionally, make your own dataset and test the SfM.  
    *Fill the #todo blank in:* `camera_calibaration`
 
-## Directory Structure
+### Directory Structure
 ```
 .  
 ├── input/                    # Input dataset directory 
@@ -71,9 +88,9 @@ The provided code (`main_two_view.py`) is structured in multiple stages:
 └── README.md                 # This README file
 ```
 
-## Requirements
+### Requirements
 
-### Python Requirements
+#### Python Requirements
 
 - **Python Version:** 3.6 or above
 - **Libraries:**  
@@ -91,7 +108,7 @@ You can install the required Python libraries (except the MATLAB Engine) using p
 pip install opencv-python numpy natsort tqdm
 ```
 
-### MATLAB Engine API for Python
+#### MATLAB Engine API for Python
 The MATLAB Engine API for Python allows your Python code to invoke MATLAB functions. This is essential for running certain parts of the assignment (e.g., essential matrix estimation and triangulation).
 
 **Installation Instructions:**
@@ -130,9 +147,9 @@ The MATLAB Engine API for Python allows your Python code to invoke MATLAB functi
     ```
     If there are no errors, the installation was successful.
 
-## Usage
+### Usage
 
-### Arguments
+#### Arguments
 Run the main script using the command line. The script accepts several arguments to control various processing steps:
 
 - `-s` or `--step`: Steps to execute (default: all steps). For example, `-s 1,2,3` runs only the camera calibration, feature matching, and essential matrix estimation steps. If `-s all`, runs all step of two view SfM.
@@ -155,7 +172,7 @@ Run the main script using the command line. The script accepts several arguments
   
 - `--visualize_camera_pose`: When set to True, the camera poses recovered during essential matrix decomposition will be visualized. (default: moai)
 
-### Example Command
+#### Example Command
 
 Run the main script from the command line with the desired arguments. For instance:
 
@@ -163,7 +180,7 @@ Run the main script from the command line with the desired arguments. For instan
 python main.py -s all -d ./input -o ./output --object moai
 ```
 
-## Implementation Details
+### Implementation Details
 1. **Step 0: Settings and MATLAB Engine Initialization**
    - Initializes the MATLAB engine if required for MATLAB-dependent steps
 
@@ -183,7 +200,6 @@ python main.py -s all -d ./input -o ./output --object moai
    - Triangulates 3D points based on the established camera poses and inlier matches.
    - Generates a PLY file containing a colored point cloud.
 
-## Implementation Details for Additional Credit
 6. **Step 5: Three Point Algorithm for PnP.**  
    - Estimate the additional camera pose using three point algorithm with RANSAC
    - And, calculate the addtional inlier points to 3d points
@@ -197,7 +213,7 @@ python main.py -s all -d ./input -o ./output --object moai
    - Make your own dataset. Note that, fix the manual focus.
    - Run SfM. (make a folder "custom" in input and use the arguments `--object custom`)
 
-## Output  
+### Output  
 The script generates the following outputs for each object:
 - Matching result: Saved `matching_results_init_images.jpg` and `matching_results_init_images.pkl`
 - Essential matrix results: Saved `E_estimation.pkl`
@@ -205,5 +221,5 @@ The script generates the following outputs for each object:
 - Triangulation results: Saved `triangulation_results.pkl`
 - 3D point cloud results: Saved `two_view_results.ply`
 
-## Troubleshooting
+### Troubleshooting
 - Edit the line 71 in `main_two_view.py` for folder structure of camera_calibration.
